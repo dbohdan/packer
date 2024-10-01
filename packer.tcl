@@ -33,7 +33,7 @@ proc ::packer::init {} {
         sdx                 sdx-20110317.kit
 
         # The Tcllib archive file.
-        tcllib              Tcllib-1.16.tar.gz
+        tcllib              tcllib-2.0.tar.zst
 
         # The Git repository to clone.  Can be local or remote.
         sourceRepository    https://github.com/tclssg/tclssg
@@ -149,8 +149,8 @@ proc ::packer::build args {
 
         # Unpack Tcllib and install it in the subdirectory lib/tcllib of the
         # Starkit VFS.
-        run tar zxf [opt tcllib]
-        with-path [regsub {.tar.gz$} [opt tcllib] {}] {
+        run zstd -d < [opt tcllib] | tar xf -
+        with-path [regsub .tar.zst$ [opt tcllib] {}] {
             run {*}[sl {
                 >@ stdout
                 [file join .. [opt buildTclkit]]
